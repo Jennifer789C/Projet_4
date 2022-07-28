@@ -21,29 +21,18 @@ tournoi.joueurs.append(nani)
 chou = Joueur("Malacain", "Charlaine", "1996-08-17", "F", "3")
 tournoi.joueurs.append(chou)
 
-print("liste des joueurs de ce tournoi par ordre d'inscription :")
-print(tournoi.joueurs)
-print("Liste des joueurs par classement :")
-tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
-print(tournoi.joueurs)
+tournoi.joueurs.sort(key=lambda joueur: joueur.classement)  # tri des joueurs par classement
 
+"""Division des joueurs en 2 groupes pour créer les matchs"""
 nb_joueurs = len(tournoi.joueurs)
 moitie = nb_joueurs // 2
 joueurs_moitie_sup = tournoi.joueurs[:moitie]
 joueurs_moitie_inf = tournoi.joueurs[moitie:]
-print("Liste de la moitie supérieure des joueurs :")
-print(joueurs_moitie_sup)
-print("Liste de la moitie inférieure des joueurs :")
-print(joueurs_moitie_inf)
 
 match1 = Match(joueurs_moitie_sup[0], joueurs_moitie_inf[0])
-print(match1)
 match2 = Match(joueurs_moitie_sup[1], joueurs_moitie_inf[1])
-print(match2)
 match3 = Match(joueurs_moitie_sup[2], joueurs_moitie_inf[2])
-print(match3)
 match4 = Match(joueurs_moitie_sup[3], joueurs_moitie_inf[3])
-print(match4)
 
 tour1 = Tour("Round 1", match1, match2, match3, match4)
 print(tour1)

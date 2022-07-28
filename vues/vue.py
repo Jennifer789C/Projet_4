@@ -108,10 +108,6 @@ class Vue:
         input("Prêt à générer les paires de joueurs ?")
         return True
 
-    def afficher_paires_joueurs(self):
+    def afficher_paires_joueurs(self, tour):
         """Affiche les paires de joueurs"""
-        print("Tour : Round 1")
-        print("Match 1 : untel et untel")
-        print("Match 2 : untel et untel")
-        print("Match 3 : untel et untel")
-        print("Match 4 : untel et untel")
+        print(tour.__str__())
