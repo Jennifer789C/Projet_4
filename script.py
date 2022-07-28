@@ -10,8 +10,11 @@ def main():
 
 main()
 """
-Génération des paires de joueurs pour le tour 1
-"""
-"""
-Afficher les paires du tour
+Possibilité d'avoir plus ou moins de 8 joueurs ???
+
+Ajouter le tour 1 dans la liste des tournées du tournoi
+Fin du tour :   vue : saisir la fin du tour
+                modèle tour : intégration de la donnée date_heure_fin
+
+Saisie des scores de chaque joueur
 """

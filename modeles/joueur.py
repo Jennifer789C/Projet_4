@@ -11,5 +11,7 @@ class Joueur:
         self.classement = classement
 
     def __str__(self):
-        return f"{self.prenom} {self.nom} né le {self.date_naissance.day}/{self.date_naissance.month}/" \
-               f"{self.date_naissance.year} est classé {self.classement}e."
+        return f"{self.prenom} {self.nom}"
+
+    def __repr__(self):
+        return f"{self.nom} {self.prenom} : {self.classement}"

@@ -1,6 +1,8 @@
 """Définition du contrôleur"""
 
 from modeles.tournoi import Tournoi
+from modeles.tour import Tour
+from modeles.match import Match
 from modeles.joueur import Joueur
 from vues.vue import Vue
 
@@ -37,10 +39,29 @@ class Controleur:
     def generer_paires_tour_1(self):
         """Crée les paires de joueurs pour le premier tour"""
 
+
+        return tour1
+
     def commencer(self):
         """Commence le tournoi"""
         self.vue.entrer_joueurs()
         self.saisir_joueurs()
         self.vue.lancer_generation_paires()
-        self.generer_paires_tour_1()
-        self.vue.afficher_paires_joueurs()
+
+        # Tri des joueurs par classement
+        self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
+
+        # Division des joueurs en 2 groupes pour créer les matchs du tour 1
+        nb_joueurs = len(self.tournoi.joueurs)
+        moitie = nb_joueurs // 2
+        joueurs_moitie_sup = self.tournoi.joueurs[:moitie]
+        joueurs_moitie_inf = self.tournoi.joueurs[moitie:]
+
+        match1 = Match(joueurs_moitie_sup[0], joueurs_moitie_inf[0])
+        match2 = Match(joueurs_moitie_sup[1], joueurs_moitie_inf[1])
+        match3 = Match(joueurs_moitie_sup[2], joueurs_moitie_inf[2])
+        match4 = Match(joueurs_moitie_sup[3], joueurs_moitie_inf[3])
+
+        tour1 = Tour("Round 1", match1, match2, match3, match4)
+
+        self.vue.afficher_paires_joueurs(tour1)
