@@ -1,6 +1,7 @@
 from modeles.tournoi import Tournoi
 from modeles.joueur import Joueur
 from modeles.match import Match
+from modeles.tour import Tour
 
 tournoi = Tournoi("test", "ici", "2022-07-24", "2022-07-24", "2", "")
 moi = Joueur("Cotte", "Jennifer", "1990-08-07", "F", "7")
@@ -25,6 +26,7 @@ print(tournoi.joueurs)
 print("Liste des joueurs par classement :")
 tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
 print(tournoi.joueurs)
+
 nb_joueurs = len(tournoi.joueurs)
 moitie = nb_joueurs // 2
 joueurs_moitie_sup = tournoi.joueurs[:moitie]
@@ -42,3 +44,6 @@ match3 = Match(joueurs_moitie_sup[2], joueurs_moitie_inf[2])
 print(match3)
 match4 = Match(joueurs_moitie_sup[3], joueurs_moitie_inf[3])
 print(match4)
+
+tour1 = Tour("Round 1", match1, match2, match3, match4)
+print(tour1)

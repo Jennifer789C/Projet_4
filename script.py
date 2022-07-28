@@ -10,8 +10,9 @@ def main():
 
 main()
 """
-Génération des paires de joueurs pour le tour 1
-"""
-"""
+Possibilité d'avoir plus ou moins de 8 joueurs ???
+Génération des paires de joueurs pour le tour 1 :
+ => Création du tour 1 et de ses 4 matchs
+
 Afficher les paires du tour
 """
