@@ -9,10 +9,12 @@ class Match:
         """Initialise les joueurs et les résultats"""
         score = 0.0
         self.joueur1 = joueur1
-        joueur1 = [Joueur, score]
+        self.score1 = score
+        self.resultatJ1 = [joueur1, self.score1]
         self.joueur2 = joueur2
-        joueur2 = [Joueur, score]
-        self.match = (joueur1, joueur2)
+        self.score2 = score
+        self.resultatJ2 = [joueur2, self.score2]
+        self.match = (self.resultatJ1, self.resultatJ2)
 
     def __str__(self):
         return f"{self.joueur1} joue contre {self.joueur2}"

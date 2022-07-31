@@ -1,5 +1,6 @@
 """Définition du contrôleur"""
 
+import datetime
 from modeles.tournoi import Tournoi
 from modeles.tour import Tour
 from modeles.match import Match
@@ -36,12 +37,6 @@ class Controleur:
             joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"], donnees["classement"])
             self.tournoi.joueurs.append(joueur)
 
-    def generer_paires_tour_1(self):
-        """Crée les paires de joueurs pour le premier tour"""
-
-
-        return tour1
-
     def commencer(self):
         """Commence le tournoi"""
         self.vue.entrer_joueurs()
@@ -65,3 +60,9 @@ class Controleur:
         tour1 = Tour("Round 1", match1, match2, match3, match4)
 
         self.vue.afficher_paires_joueurs(tour1)
+
+        self.vue.declarer_fin_tour()
+        tour1.date_heure_fin = datetime.datetime.now()
+        self.tournoi.tournees.append(tour1)
+
+        self.vue.saisir_resultats_match(tour1)

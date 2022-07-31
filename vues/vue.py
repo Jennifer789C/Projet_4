@@ -105,9 +105,20 @@ class Vue:
     def lancer_generation_paires(self):
         """Demande à l'utilisateur s'il est prêt à générer les paires de joueurs"""
         print()
-        input("Prêt à générer les paires de joueurs ?")
+        input("Prêt à commencer le tour ?")
         return True
 
     def afficher_paires_joueurs(self, tour):
         """Affiche les paires de joueurs"""
         print(tour.__str__())
+
+    def declarer_fin_tour(self):
+        """Demande à l'utilisateur de déclarer le moment où le tour se termine"""
+        print()
+        input("Ce tour est-il terminé ?")
+        return True
+
+    def saisir_resultats_match(self, tour):
+        """Demande à l'utilisateur de saisir les résultats de chaque match du tour"""
+        print(f"Pour le match : {tour.match1}")
+        input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour.match1.joueur1} gagne, 2={tour.match1.joueur2} gagne : ")
