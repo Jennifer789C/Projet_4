@@ -7,7 +7,7 @@ from modeles.tour import Tour
 tournoi = Tournoi("test", "ici", "2022-07-24", "2022-07-24", "2", "")
 moi = Joueur("Cotte", "Jennifer", "1990-08-07", "F", "7")
 tournoi.joueurs.append(moi)
-toi = Joueur("Cotte", "Matthieu", "1990-11-27", "M", "5")
+toi = Joueur("Cotte", "Matthieu", "1990-11-27", "H", "5")
 tournoi.joueurs.append(toi)
 bebe = Joueur("Cotte", "Julie", "2019-09-11", "F", "1")
 tournoi.joueurs.append(bebe)
@@ -15,7 +15,7 @@ mimi = Joueur("Cotte", "Jookie", "2014-07-08", "F", "2")
 tournoi.joueurs.append(mimi)
 maman = Joueur("Malacain", "Sophie", "1968-05-27", "F", "6")
 tournoi.joueurs.append(maman)
-papa = Joueur("Malacain", "Gilles", "1964-12-02", "M", "8")
+papa = Joueur("Malacain", "Gilles", "1964-12-02", "H", "8")
 tournoi.joueurs.append(papa)
 nani = Joueur("Malacain", "Marine", "1993-09-10", "F", "4")
 tournoi.joueurs.append(nani)
@@ -58,7 +58,82 @@ elif resultat == "2":
     tour1.match1.resultatJ1[1] = 0.0
     tour1.match1.resultatJ2[1] = 1.0
 
-print(match1.match)
 tour1.match1.joueur1.score += tour1.match1.resultatJ1[1]
 tour1.match1.joueur2.score += tour1.match1.resultatJ2[1]
 print(match1.match)
+
+rencontre = (tour1.match1.joueur1, tour1.match1.joueur2)
+tournoi.rencontres.append(rencontre)
+
+print()
+print(f"Pour le match : {tour1.match2}")
+resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match2.joueur1} gagne, 2={tour1.match2.joueur2} gagne : ")
+while resultat != "0" and resultat != "1" and resultat != "2":
+    print("Veuillez saisir 0 pour une égalité et, 1 ou 2 pour désigner le joueur gagnant")
+    resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match2.joueur1} gagne, 2={tour1.match2.joueur2} gagne : ")
+
+if resultat == "0":
+    tour1.match2.resultatJ1[1] = 0.5
+    tour1.match2.resultatJ2[1] = 0.5
+elif resultat == "1":
+    tour1.match2.resultatJ1[1] = 1.0
+    tour1.match2.resultatJ2[1] = 0.0
+elif resultat == "2":
+    tour1.match2.resultatJ1[1] = 0.0
+    tour1.match2.resultatJ2[1] = 1.0
+
+tour1.match2.joueur1.score += tour1.match2.resultatJ1[1]
+tour1.match2.joueur2.score += tour1.match2.resultatJ2[1]
+print(match2.match)
+
+rencontre = (tour1.match2.joueur1, tour1.match2.joueur2)
+tournoi.rencontres.append(rencontre)
+
+print()
+print(f"Pour le match : {tour1.match3}")
+resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match3.joueur1} gagne, 2={tour1.match3.joueur2} gagne : ")
+while resultat != "0" and resultat != "1" and resultat != "2":
+    print("Veuillez saisir 0 pour une égalité et, 1 ou 2 pour désigner le joueur gagnant")
+    resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match3.joueur1} gagne, 2={tour1.match3.joueur2} gagne : ")
+
+if resultat == "0":
+    tour1.match3.resultatJ1[1] = 0.5
+    tour1.match3.resultatJ2[1] = 0.5
+elif resultat == "1":
+    tour1.match3.resultatJ1[1] = 1.0
+    tour1.match3.resultatJ2[1] = 0.0
+elif resultat == "2":
+    tour1.match3.resultatJ1[1] = 0.0
+    tour1.match3.resultatJ2[1] = 1.0
+
+tour1.match3.joueur1.score += tour1.match3.resultatJ1[1]
+tour1.match3.joueur2.score += tour1.match3.resultatJ2[1]
+print(match3.match)
+
+rencontre = (tour1.match3.joueur1, tour1.match3.joueur2)
+tournoi.rencontres.append(rencontre)
+
+print()
+print(f"Pour le match : {tour1.match4}")
+resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match4.joueur1} gagne, 2={tour1.match4.joueur2} gagne : ")
+while resultat != "0" and resultat != "1" and resultat != "2":
+    print("Veuillez saisir 0 pour une égalité et, 1 ou 2 pour désigner le joueur gagnant")
+    resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match4.joueur1} gagne, 2={tour1.match4.joueur2} gagne : ")
+
+if resultat == "0":
+    tour1.match4.resultatJ1[1] = 0.5
+    tour1.match4.resultatJ2[1] = 0.5
+elif resultat == "1":
+    tour1.match4.resultatJ1[1] = 1.0
+    tour1.match4.resultatJ2[1] = 0.0
+elif resultat == "2":
+    tour1.match4.resultatJ1[1] = 0.0
+    tour1.match4.resultatJ2[1] = 1.0
+
+tour1.match4.joueur1.score += tour1.match4.resultatJ1[1]
+tour1.match4.joueur2.score += tour1.match4.resultatJ2[1]
+print(match4.match)
+
+rencontre = (tour1.match4.joueur1, tour1.match4.joueur2)
+tournoi.rencontres.append(rencontre)
+print(tournoi.rencontres)

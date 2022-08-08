@@ -102,10 +102,10 @@ class Vue:
 
         return donnees
 
-    def lancer_generation_paires(self):
-        """Demande à l'utilisateur s'il est prêt à générer les paires de joueurs"""
+    def commencer_tour(self):
+        """Demande à l'utilisateur s'il est prêt à commencer un nouveau tour"""
         print()
-        input("Prêt à commencer le tour ?")
+        input("Prêt à commencer le nouveau tour ?")
         return True
 
     def afficher_paires_joueurs(self, tour):

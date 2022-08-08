@@ -11,6 +11,7 @@ def main():
 main()
 """
 Possibilité d'avoir plus ou moins de 8 joueurs ???
+gestion des erreurs : un classement déjà attribué à un joueur
 
 Générer les paires du tour 2
 """
