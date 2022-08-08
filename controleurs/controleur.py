@@ -1,5 +1,6 @@
 """Définition du contrôleur"""
 
+import datetime
 from modeles.tournoi import Tournoi
 from modeles.tour import Tour
 from modeles.match import Match
@@ -36,17 +37,11 @@ class Controleur:
             joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"], donnees["classement"])
             self.tournoi.joueurs.append(joueur)
 
-    def generer_paires_tour_1(self):
-        """Crée les paires de joueurs pour le premier tour"""
-
-
-        return tour1
-
     def commencer(self):
         """Commence le tournoi"""
         self.vue.entrer_joueurs()
         self.saisir_joueurs()
-        self.vue.lancer_generation_paires()
+        self.vue.commencer_tour()
 
         # Tri des joueurs par classement
         self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
@@ -65,3 +60,35 @@ class Controleur:
         tour1 = Tour("Round 1", match1, match2, match3, match4)
 
         self.vue.afficher_paires_joueurs(tour1)
+
+        self.vue.declarer_fin_tour()
+        tour1.date_heure_fin = datetime.datetime.now()
+        self.tournoi.tournees.append(tour1)
+
+        self.vue.saisir_resultats_match(tour1.match1)
+        tour1.match1.joueur1.score += tour1.match1.resultatJ1[1]
+        tour1.match1.joueur2.score += tour1.match1.resultatJ2[1]
+        rencontre = (tour1.match1.joueur1, tour1.match1.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.vue.saisir_resultats_match(tour1.match2)
+        tour1.match2.joueur1.score += tour1.match2.resultatJ1[1]
+        tour1.match2.joueur2.score += tour1.match2.resultatJ2[1]
+        rencontre = (tour1.match2.joueur1, tour1.match2.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.vue.saisir_resultats_match(tour1.match3)
+        tour1.match3.joueur1.score += tour1.match3.resultatJ1[1]
+        tour1.match3.joueur2.score += tour1.match3.resultatJ2[1]
+        rencontre = (tour1.match3.joueur1, tour1.match3.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.vue.saisir_resultats_match(tour1.match4)
+        tour1.match4.joueur1.score += tour1.match4.resultatJ1[1]
+        tour1.match4.joueur2.score += tour1.match4.resultatJ2[1]
+        rencontre = (tour1.match4.joueur1, tour1.match4.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.vue.commencer_tour()
+
+        # Tri des joueurs par score puis par classement

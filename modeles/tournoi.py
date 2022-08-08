@@ -18,6 +18,7 @@ class Tournoi:
         self.nb_tours = nb_tours
         self.joueurs: List[Joueur] = []
         self.tournees: List[Tour] = []
+        self.rencontres = []
 
     def __str__(self):
         return f"tournoi = nom : {self.nom}, lieu : {self.lieu}, date début : {self.date_debut}, date fin : {self.date_fin}, temps :" \

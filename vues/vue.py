@@ -102,12 +102,38 @@ class Vue:
 
         return donnees
 
-    def lancer_generation_paires(self):
-        """Demande à l'utilisateur s'il est prêt à générer les paires de joueurs"""
+    def commencer_tour(self):
+        """Demande à l'utilisateur s'il est prêt à commencer un nouveau tour"""
         print()
-        input("Prêt à générer les paires de joueurs ?")
+        input("Prêt à commencer le nouveau tour ?")
         return True
 
     def afficher_paires_joueurs(self, tour):
         """Affiche les paires de joueurs"""
         print(tour.__str__())
+
+    def declarer_fin_tour(self):
+        """Demande à l'utilisateur de déclarer le moment où le tour se termine"""
+        print()
+        input("Ce tour est-il terminé ?")
+        return True
+
+    def saisir_resultats_match(self, match):
+        """Demande à l'utilisateur de saisir les résultats de chaque match du tour"""
+        print()
+        print(f"Pour le match : {match}")
+        resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, 2={match.joueur2} gagne : ")
+        while resultat != "0" and resultat != "1" and resultat != "2":
+            print("Veuillez saisir 0 pour une égalité et, 1 ou 2 pour désigner le joueur gagnant")
+            resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, "
+                             f"2={match.joueur2} gagne : ")
+
+        if resultat == "0":
+            match.resultatJ1[1] = 0.5
+            match.resultatJ2[1] = 0.5
+        elif resultat == "1":
+            match.resultatJ1[1] = 1
+            match.resultatJ2[1] = 0
+        elif resultat == "2":
+            match.resultatJ1[1] = 0
+            match.resultatJ2[1] = 1
