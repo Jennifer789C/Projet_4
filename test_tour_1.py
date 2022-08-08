@@ -41,6 +41,7 @@ print(tour1)
 tour1.date_heure_fin = datetime.datetime.now()
 tournoi.tournees.append(tour1)
 
+print()
 print(f"Pour le match : {tour1.match1}")
 resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match1.joueur1} gagne, 2={tour1.match1.joueur2} gagne : ")
 while resultat != "0" and resultat != "1" and resultat != "2":
@@ -48,13 +49,16 @@ while resultat != "0" and resultat != "1" and resultat != "2":
     resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour1.match1.joueur1} gagne, 2={tour1.match1.joueur2} gagne : ")
 
 if resultat == "0":
-    match1.resultatJ1[1] = 0.5
-    match1.resultatJ2[1] = 0.5
+    tour1.match1.resultatJ1[1] = 0.5
+    tour1.match1.resultatJ2[1] = 0.5
 elif resultat == "1":
-    match1.resultatJ1[1] = 1
-    match1.resultatJ2[1] = 0
+    tour1.match1.resultatJ1[1] = 1.0
+    tour1.match1.resultatJ2[1] = 0.0
 elif resultat == "2":
-    match1.resultatJ1[1] = 0
-    match1.resultatJ2[1] = 1
+    tour1.match1.resultatJ1[1] = 0.0
+    tour1.match1.resultatJ2[1] = 1.0
 
+print(match1.match)
+tour1.match1.joueur1.score += tour1.match1.resultatJ1[1]
+tour1.match1.joueur2.score += tour1.match1.resultatJ2[1]
 print(match1.match)

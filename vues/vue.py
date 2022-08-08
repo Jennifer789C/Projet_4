@@ -118,7 +118,22 @@ class Vue:
         input("Ce tour est-il terminé ?")
         return True
 
-    def saisir_resultats_match(self, tour):
+    def saisir_resultats_match(self, match):
         """Demande à l'utilisateur de saisir les résultats de chaque match du tour"""
-        print(f"Pour le match : {tour.match1}")
-        input(f"Veuillez indiquer le résultat : 0=égalité, 1={tour.match1.joueur1} gagne, 2={tour.match1.joueur2} gagne : ")
+        print()
+        print(f"Pour le match : {match}")
+        resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, 2={match.joueur2} gagne : ")
+        while resultat != "0" and resultat != "1" and resultat != "2":
+            print("Veuillez saisir 0 pour une égalité et, 1 ou 2 pour désigner le joueur gagnant")
+            resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, "
+                             f"2={match.joueur2} gagne : ")
+
+        if resultat == "0":
+            match.resultatJ1[1] = 0.5
+            match.resultatJ2[1] = 0.5
+        elif resultat == "1":
+            match.resultatJ1[1] = 1
+            match.resultatJ2[1] = 0
+        elif resultat == "2":
+            match.resultatJ1[1] = 0
+            match.resultatJ2[1] = 1

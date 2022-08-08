@@ -65,4 +65,15 @@ class Controleur:
         tour1.date_heure_fin = datetime.datetime.now()
         self.tournoi.tournees.append(tour1)
 
-        self.vue.saisir_resultats_match(tour1)
+        self.vue.saisir_resultats_match(tour1.match1)
+        tour1.match1.joueur1.score += tour1.match1.resultatJ1[1]
+        tour1.match1.joueur2.score += tour1.match1.resultatJ2[1]
+        self.vue.saisir_resultats_match(tour1.match2)
+        tour1.match2.joueur1.score += tour1.match2.resultatJ1[1]
+        tour1.match2.joueur2.score += tour1.match2.resultatJ2[1]
+        self.vue.saisir_resultats_match(tour1.match3)
+        tour1.match3.joueur1.score += tour1.match3.resultatJ1[1]
+        tour1.match3.joueur2.score += tour1.match3.resultatJ2[1]
+        self.vue.saisir_resultats_match(tour1.match4)
+        tour1.match4.joueur1.score += tour1.match4.resultatJ1[1]
+        tour1.match4.joueur2.score += tour1.match4.resultatJ2[1]

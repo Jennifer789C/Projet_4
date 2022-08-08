@@ -9,9 +9,10 @@ class Joueur:
         self.date_naissance = date_naissance
         self.sexe = sexe
         self.classement = classement
+        self.score = 0.0
 
     def __str__(self):
         return f"{self.prenom} {self.nom}"
 
     def __repr__(self):
-        return f"{self.nom} {self.prenom} : {self.classement}"
+        return f"{self.prenom} {self.nom} : {self.score}"
