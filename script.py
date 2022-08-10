@@ -1,10 +1,8 @@
 from controleurs.controleur import Controleur
-from vues.vue import Vue
 
 
 def main():
-    vue = Vue()
-    jeu = Controleur(vue)
+    jeu = Controleur()
     jeu.commencer()
 
 
@@ -13,5 +11,6 @@ main()
 Possibilité d'avoir plus ou moins de 8 joueurs ???
 gestion des erreurs : un classement déjà attribué à un joueur
 
-Créer un menu
+Intégrer une boucle ou autres pour retomber sur le menu principal
+Gérer le menu des rapports
 """

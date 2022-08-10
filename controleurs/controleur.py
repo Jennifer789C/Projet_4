@@ -6,15 +6,17 @@ from modeles.tour import Tour
 from modeles.match import Match
 from modeles.joueur import Joueur
 from vues.vue import Vue
+from vues.menu import Menu
 
 
 class Controleur:
-    """Un contrôleur a un tournoi et une vue"""
-    def __init__(self, vue: Vue):
-        """Initialise la vue et les modèles"""
+    """Un contrôleur a un tournoi, un menu et une vue utilisateur"""
+    def __init__(self):
+        """Initialise les vues et le modèle"""
         # vue
-        self.vue = vue
-        # modèles
+        self.vue = Vue()
+        self.menu = Menu()
+        # modèle
         self.tournoi = self.creer_tournoi()
 
     def creer_tournoi(self):
@@ -36,6 +38,52 @@ class Controleur:
             donnees = self.vue.saisir_donnees_joueurs()
             joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"], donnees["classement"])
             self.tournoi.joueurs.append(joueur)
+
+    def generer_paires_tour1(self):
+        """Génère les paires de joueurs du premier tour"""
+        # Tri des joueurs par classement
+        self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
+
+        # Division des joueurs en 2 groupes pour créer les matchs du tour 1
+        nb_joueurs = len(self.tournoi.joueurs)
+        moitie = nb_joueurs // 2
+        joueurs_moitie_sup = self.tournoi.joueurs[:moitie]
+        joueurs_moitie_inf = self.tournoi.joueurs[moitie:]
+
+        match1 = Match(joueurs_moitie_sup[0], joueurs_moitie_inf[0])
+        match2 = Match(joueurs_moitie_sup[1], joueurs_moitie_inf[1])
+        match3 = Match(joueurs_moitie_sup[2], joueurs_moitie_inf[2])
+        match4 = Match(joueurs_moitie_sup[3], joueurs_moitie_inf[3])
+
+        tour1 = Tour("Round 1", match1, match2, match3, match4)
+
+        return tour1
+
+    def declarer_fin_tour(self, tour):
+        """A la fin, le tournoi est mis à jour :
+        Ajoute le tour à la liste Tournées du tournoi
+        Invite l'utilisateur à saisir les résultats des matchs
+        Ajoute les rencontres à la liste du tournoi"""
+
+        self.vue.declarer_fin_tour()
+        tour.date_heure_fin = datetime.datetime.now()
+        self.tournoi.tournees.append(tour)
+
+        self.saisir_resultat_match(tour.match1)
+        rencontre = (tour.match1.joueur1, tour.match1.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.saisir_resultat_match(tour.match2)
+        rencontre = (tour.match2.joueur1, tour.match2.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.saisir_resultat_match(tour.match3)
+        rencontre = (tour.match3.joueur1, tour.match3.joueur2)
+        self.tournoi.rencontres.append(rencontre)
+
+        self.saisir_resultat_match(tour.match4)
+        rencontre = (tour.match4.joueur1, tour.match4.joueur2)
+        self.tournoi.rencontres.append(rencontre)
 
     def saisir_resultat_match(self, match):
         """Ajoute le score du match au score total du joueur"""
@@ -76,81 +124,42 @@ class Controleur:
 
     def commencer(self):
         """Commence le tournoi"""
-        self.vue.entrer_joueurs()
-        self.saisir_joueurs()
-        self.vue.commencer_tour()
+        choix = self.menu.afficher_menu_principal()
+        while len(self.tournoi.joueurs) == 0:
+            if choix == "2" or choix == "3":
+                self.menu.erreur_choix()
+                choix = self.menu.afficher_menu_principal()
+            elif choix == "1" or choix == "4":
+                break
 
-        # Tri des joueurs par classement
-        self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
+        if choix == "1":
+            self.saisir_joueurs()
 
-        # Division des joueurs en 2 groupes pour créer les matchs du tour 1
-        nb_joueurs = len(self.tournoi.joueurs)
-        moitie = nb_joueurs // 2
-        joueurs_moitie_sup = self.tournoi.joueurs[:moitie]
-        joueurs_moitie_inf = self.tournoi.joueurs[moitie:]
+        if choix == "2":
+            if len(self.tournoi.tournees) == 0:
+                tour1 = self.generer_paires_tour1()
+                self.vue.afficher_paires_joueurs(tour1)
+                self.declarer_fin_tour(tour1)
 
-        match1 = Match(joueurs_moitie_sup[0], joueurs_moitie_inf[0])
-        match2 = Match(joueurs_moitie_sup[1], joueurs_moitie_inf[1])
-        match3 = Match(joueurs_moitie_sup[2], joueurs_moitie_inf[2])
-        match4 = Match(joueurs_moitie_sup[3], joueurs_moitie_inf[3])
+            else:
+                while len(self.tournoi.tournees) < self.tournoi.nb_tours:
+                    # Tri des joueurs par score puis par classement
+                    self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
+                    self.tournoi.joueurs.sort(key=lambda joueur: joueur.score, reverse=True)
 
-        tour1 = Tour("Round 1", match1, match2, match3, match4)
+                    matchs = self.generer_paires(list(self.tournoi.joueurs))
 
-        self.vue.afficher_paires_joueurs(tour1)
+                    numero_round = len(self.tournoi.tournees) + 1
+                    tour = Tour(f"Round {numero_round}", matchs[0], matchs[1], matchs[2], matchs[3])
+                    self.vue.afficher_paires_joueurs(tour)
 
-        self.vue.declarer_fin_tour()
-        tour1.date_heure_fin = datetime.datetime.now()
-        self.tournoi.tournees.append(tour1)
+                    self.declarer_fin_tour(tour)
 
-        self.saisir_resultat_match(tour1.match1)
-        rencontre = (tour1.match1.joueur1, tour1.match1.joueur2)
-        self.tournoi.rencontres.append(rencontre)
+                    if numero_round == self.tournoi.nb_tours:
+                        self.vue.afficher_resultats(self.tournoi)
 
-        self.saisir_resultat_match(tour1.match2)
-        rencontre = (tour1.match2.joueur1, tour1.match2.joueur2)
-        self.tournoi.rencontres.append(rencontre)
+        if choix == "3":
+            self.saisir_nouveaux_classements(self.tournoi.joueurs)
 
-        self.saisir_resultat_match(tour1.match3)
-        rencontre = (tour1.match3.joueur1, tour1.match3.joueur2)
-        self.tournoi.rencontres.append(rencontre)
-
-        self.saisir_resultat_match(tour1.match4)
-        rencontre = (tour1.match4.joueur1, tour1.match4.joueur2)
-        self.tournoi.rencontres.append(rencontre)
-
-        while len(self.tournoi.tournees) < self.tournoi.nb_tours:
-            self.vue.commencer_tour()
-
-            # Tri des joueurs par score puis par classement
-            self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
-            self.tournoi.joueurs.sort(key=lambda joueur: joueur.score, reverse=True)
-
-            matchs = self.generer_paires(list(self.tournoi.joueurs))
-
-            numero_round = len(self.tournoi.tournees) + 1
-            tour = Tour(f"Round {numero_round}", matchs[0], matchs[1], matchs[2], matchs[3])
-            self.vue.afficher_paires_joueurs(tour)
-
-            self.vue.declarer_fin_tour()
-            tour.date_heure_fin = datetime.datetime.now()
-            self.tournoi.tournees.append(tour)
-
-            self.saisir_resultat_match(tour.match1)
-            rencontre = (tour.match1.joueur1, tour.match1.joueur2)
-            self.tournoi.rencontres.append(rencontre)
-
-            self.saisir_resultat_match(tour.match2)
-            rencontre = (tour.match2.joueur1, tour.match2.joueur2)
-            self.tournoi.rencontres.append(rencontre)
-
-            self.saisir_resultat_match(tour.match3)
-            rencontre = (tour.match3.joueur1, tour.match3.joueur2)
-            self.tournoi.rencontres.append(rencontre)
-
-            self.saisir_resultat_match(tour.match4)
-            rencontre = (tour.match4.joueur1, tour.match4.joueur2)
-            self.tournoi.rencontres.append(rencontre)
-
-        self.vue.afficher_resultats(self.tournoi)
-        self.vue.modifier_classements()
-        self.saisir_nouveaux_classements(self.tournoi.joueurs)
+        if choix == "4":
+            self.menu.afficher_rapports()

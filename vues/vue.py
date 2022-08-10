@@ -55,12 +55,6 @@ class Vue:
 
         return infos
 
-    def entrer_joueurs(self):
-        """Demande à l'utilisateur s'il est prêt à faire entrer les joueurs"""
-        print()
-        input("Prêt à faire entrer les joueurs ?")
-        return True
-
     def saisir_donnees_joueurs(self):
         """L'utilisateur saisi les données de chaque joueur"""
         donnees = {}
@@ -102,12 +96,6 @@ class Vue:
 
         return donnees
 
-    def commencer_tour(self):
-        """Demande à l'utilisateur s'il est prêt à commencer un nouveau tour"""
-        print()
-        input("Prêt à commencer le nouveau tour ?")
-        return True
-
     def afficher_paires_joueurs(self, tour):
         """Affiche les paires de joueurs"""
         print(tour.__str__())
@@ -136,12 +124,6 @@ class Vue:
         print("Félicitations ce tournoi est terminé, voici les résultats :")
         for joueur in tournoi.joueurs:
             print(f"{joueur} a obtenu {joueur.score} points")
-
-    def modifier_classements(self):
-        """Demande à l'utilisateur s'il souhaite modifier les classements des joueurs"""
-        print()
-        input("Voulez-vous modifier les classements des joueurs ?")
-        return True
 
     def saisir_nouveau_classement(self, joueur):
         """Demande à l'utilisateur de saisir le nouveau classement du joueur"""
