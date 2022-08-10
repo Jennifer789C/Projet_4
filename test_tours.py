@@ -22,15 +22,21 @@ chou = Joueur("Malacain", "Charlaine", "1996-08-17", "F", "3")
 tournoi.joueurs.append(chou)
 
 # tour 1 :
+match1 = Match(bebe, toi)
 rencontre1 = (bebe, toi)   # bebe gagne
 tournoi.rencontres.append(rencontre1)
+match2 = Match(mimi, maman)
 rencontre2 = (mimi, maman)   # égalité
 tournoi.rencontres.append(rencontre2)
+match3 = Match(chou, moi)
 rencontre3 = (chou, moi)   # moi gagne
 tournoi.rencontres.append(rencontre3)
+match4 = Match(nani, papa)
 rencontre4 = (nani, papa)   # égalité
 tournoi.rencontres.append(rencontre4)
-
+tour1 = Tour("Round 1", match1, match2, match3, match4)
+tournoi.tournees.append(tour1)
+"""
 # tour 2 :
 rencontre5 = (bebe, moi)   # bebe gagne
 tournoi.rencontres.append(rencontre5)
@@ -50,56 +56,35 @@ rencontre11 = (moi, papa)   # moi gagne
 tournoi.rencontres.append(rencontre11)
 rencontre12 = (mimi, toi)   # mimi gagne
 tournoi.rencontres.append(rencontre12)
-
-bebe.score = 3.0
-mimi.score = 1.5
-chou.score = 1.5
-nani.score = 1.5
+"""
+bebe.score = 1.0
+mimi.score = 0.5
+chou.score = 0.0
+nani.score = 0.5
 toi.score = 0.0
-maman.score = 1.5
-moi.score = 2.0
-papa.score = 1.0
+maman.score = 0.5
+moi.score = 1.0
+papa.score = 0.5
 
-# Tri des joueurs par score puis par classement
-tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
-tournoi.joueurs.sort(key=lambda joueur: joueur.score, reverse=True)
+while len(tournoi.tournees) < 4:
+    # Tri des joueurs par score puis par classement
+    tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
+    tournoi.joueurs.sort(key=lambda joueur: joueur.score, reverse=True)
 
-concurrents = tournoi.joueurs
-premier = concurrents.pop(0)
-for candidat in concurrents:
-    test1 = (premier, candidat) not in tournoi.rencontres
-    test2 = (candidat, premier) not in tournoi.rencontres
-    if (test1 is True) and (test2 is True):
-        match1 = Match(premier, candidat)
-        print(match1)
-        break
+    concurrents = list(tournoi.joueurs)
+    matchs = []
+    while len(concurrents) >= 2:
+        premier = concurrents.pop(0)
+        for candidat in concurrents:
+            test1 = (premier, candidat) not in tournoi.rencontres
+            test2 = (candidat, premier) not in tournoi.rencontres
+            if (test1 is True) and (test2 is True):
+                match = Match(premier, candidat)
+                matchs.append(match)
+                concurrents.remove(candidat)
+                break
 
-concurrents.remove(candidat)
-premier = concurrents.pop(0)
-for candidat in concurrents:
-    test1 = (premier, candidat) not in tournoi.rencontres
-    test2 = (candidat, premier) not in tournoi.rencontres
-    if (test1 is True) and (test2 is True):
-        match2 = Match(premier, candidat)
-        print(match2)
-        break
-
-concurrents.remove(candidat)
-premier = concurrents.pop(0)
-for candidat in concurrents:
-    test1 = (premier, candidat) not in tournoi.rencontres
-    test2 = (candidat, premier) not in tournoi.rencontres
-    if (test1 is True) and (test2 is True):
-        match3 = Match(premier, candidat)
-        print(match3)
-        break
-
-concurrents.remove(candidat)
-premier = concurrents.pop(0)
-for candidat in concurrents:
-    test1 = (premier, candidat) not in tournoi.rencontres
-    test2 = (candidat, premier) not in tournoi.rencontres
-    if (test1 is True) and (test2 is True):
-        match4 = Match(premier, candidat)
-        print(match4)
-        break
+    numero_round = len(tournoi.tournees) + 1
+    tour = Tour(f"Round {numero_round}", matchs[0], matchs[1], matchs[2], matchs[3])
+    print(tour)
+    tournoi.tournees.append(tour)

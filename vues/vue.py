@@ -5,7 +5,7 @@ from datetime import date
 
 class Vue:
     """La vue est constituée de toutes les interactions avec l'utilisateur"""
-    def saisie_infos_tournoi(self):
+    def saisir_infos_tournoi(self):
         """L'utilisateur saisi les infos du tournoi"""
         infos = {}
         nom = input("Quel est le nom de ce tournoi ? ")
@@ -61,7 +61,7 @@ class Vue:
         input("Prêt à faire entrer les joueurs ?")
         return True
 
-    def saisie_donnees_joueurs(self):
+    def saisir_donnees_joueurs(self):
         """L'utilisateur saisi les données de chaque joueur"""
         donnees = {}
         print()
@@ -128,12 +128,37 @@ class Vue:
             resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, "
                              f"2={match.joueur2} gagne : ")
 
-        if resultat == "0":
-            match.resultatJ1[1] = 0.5
-            match.resultatJ2[1] = 0.5
-        elif resultat == "1":
-            match.resultatJ1[1] = 1
-            match.resultatJ2[1] = 0
-        elif resultat == "2":
-            match.resultatJ1[1] = 0
-            match.resultatJ2[1] = 1
+        return resultat
+
+    def afficher_resultats(self, tournoi):
+        """Affiche les scores des joueurs à la fin du tournoi"""
+        print()
+        print("Félicitations ce tournoi est terminé, voici les résultats :")
+        for joueur in tournoi.joueurs:
+            print(f"{joueur} a obtenu {joueur.score} points")
+
+    def modifier_classements(self):
+        """Demande à l'utilisateur s'il souhaite modifier les classements des joueurs"""
+        print()
+        input("Voulez-vous modifier les classements des joueurs ?")
+        return True
+
+    def saisir_nouveau_classement(self, joueur):
+        """Demande à l'utilisateur de saisir le nouveau classement du joueur"""
+        print(f"{joueur} avait un classement initial : {joueur.classement}")
+        classement = input("Quel est son nouveau classement ? ")
+        if classement == "":
+            classement = joueur.classement
+        else:
+            while True:
+                try:
+                    classement = int(classement)
+                    break
+                except ValueError:
+                    print("Veuillez saisir une valeur numérique : un entier positif")
+                    classement = input("Quel est son nouveau classement ? ")
+            while classement < 0:
+                print("Veuillez saisir une valeur numérique : un entier positif")
+                classement = input("Quel est son nouveau classement ? ")
+
+        return classement
