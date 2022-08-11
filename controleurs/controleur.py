@@ -8,6 +8,8 @@ from modeles.joueur import Joueur
 from vues.vue import Vue
 from vues.menu import Menu
 
+JOUEURS_MAX = 8
+
 
 class Controleur:
     """Un contrôleur a un tournoi, un menu et une vue utilisateur"""
@@ -33,8 +35,7 @@ class Controleur:
 
     def saisir_joueurs(self):
         """Crée la liste de joueurs"""
-        joueurs_max = 8
-        while len(self.tournoi.joueurs) < joueurs_max:
+        while len(self.tournoi.joueurs) < JOUEURS_MAX:
             donnees = self.vue.saisir_donnees_joueurs()
             joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"], donnees["classement"])
             self.tournoi.joueurs.append(joueur)
@@ -122,27 +123,66 @@ class Controleur:
             classement = self.vue.saisir_nouveau_classement(joueur)
             joueur.classement = classement
 
-    def commencer(self):
-        """Commence le tournoi"""
-        choix = self.menu.afficher_menu_principal()
-        while len(self.tournoi.joueurs) == 0:
-            if choix == "2" or choix == "3":
-                self.menu.erreur_choix()
-                choix = self.menu.afficher_menu_principal()
-            elif choix == "1" or choix == "4":
-                break
-
+    def afficher_rapports(self):
+        """Interagit avec le système en fonction des choix de l'utilisateur"""
+        choix = self.menu.choix_rapport()
         if choix == "1":
-            self.saisir_joueurs()
+            # A gérer avec le package TinyDB
+            pass
 
         if choix == "2":
-            if len(self.tournoi.tournees) == 0:
-                tour1 = self.generer_paires_tour1()
-                self.vue.afficher_paires_joueurs(tour1)
-                self.declarer_fin_tour(tour1)
-
+            if len(self.tournoi.joueurs) == 0:
+                self.menu.erreur_choix()
             else:
-                while len(self.tournoi.tournees) < self.tournoi.nb_tours:
+                tri = self.menu.tri_liste()
+                if tri == "A":
+                    self.tournoi.joueurs.sort(key=lambda joueur: joueur.prenom)
+                    self.tournoi.joueurs.sort(key=lambda joueur: joueur.nom)
+                else:
+                    self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
+                self.menu.afficher_rapport(self.tournoi.joueurs)
+
+        if choix == "3":
+            self.menu.afficher_rapport(self.tournoi)
+            # A améliorer avec le package TinyDB
+
+        if choix == "4":
+            self.menu.afficher_rapport(self.tournoi.tournees)
+
+        if choix == "5":
+            self.menu.afficher_rapport(self.tournoi.rencontres)
+
+        if choix == "6":
+            self.menu.afficher_menu_principal()
+            exit()
+
+    def commencer(self):
+        """Commence le tournoi"""
+        while True:
+            choix = self.menu.afficher_menu_principal()
+            while len(self.tournoi.joueurs) == 0:
+                if choix == "2" or choix == "3":
+                    self.menu.erreur_choix()
+                    choix = self.menu.afficher_menu_principal()
+                elif choix == "1" or choix == "4" or choix == "5":
+                    break
+
+            if choix == "1":
+                if len(self.tournoi.joueurs) == JOUEURS_MAX:
+                    self.menu.max_joueurs_atteint()
+                else:
+                    self.saisir_joueurs()
+
+            if choix == "2":
+                if len(self.tournoi.tournees) == self.tournoi.nb_tours:
+                    self.vue.afficher_resultats(self.tournoi)
+
+                elif len(self.tournoi.tournees) == 0:
+                    tour1 = self.generer_paires_tour1()
+                    self.vue.afficher_paires_joueurs(tour1)
+                    self.declarer_fin_tour(tour1)
+
+                else:
                     # Tri des joueurs par score puis par classement
                     self.tournoi.joueurs.sort(key=lambda joueur: joueur.classement)
                     self.tournoi.joueurs.sort(key=lambda joueur: joueur.score, reverse=True)
@@ -158,8 +198,12 @@ class Controleur:
                     if numero_round == self.tournoi.nb_tours:
                         self.vue.afficher_resultats(self.tournoi)
 
-        if choix == "3":
-            self.saisir_nouveaux_classements(self.tournoi.joueurs)
+            if choix == "3":
+                self.saisir_nouveaux_classements(self.tournoi.joueurs)
 
-        if choix == "4":
-            self.menu.afficher_rapports()
+            if choix == "4":
+                self.afficher_rapports()
+
+            if choix == "5":
+                exit()
+                return False

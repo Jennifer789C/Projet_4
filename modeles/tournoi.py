@@ -21,5 +21,7 @@ class Tournoi:
         self.rencontres = []
 
     def __str__(self):
-        return f"tournoi = nom : {self.nom}, lieu : {self.lieu}, date début : {self.date_debut}, date fin : {self.date_fin}, temps :" \
-               f" {self.temps}, description : {self.description}, nb_tours : {self.nb_tours}"
+        return f"tournoi = nom : {self.nom}, lieu : {self.lieu}, date début : {self.date_debut}, date fin : {self.date_fin}," \
+               f" type de jeu : {self.temps}, nombre de tours souhaités : {self.nb_tours}, nombre de joueurs inscrits : " \
+               f"{len(self.joueurs)}, nombre de tours joués : {len(self.tournees)}, nombre de matchs joués : {len(self.rencontres)}," \
+               f" description : {self.description}"

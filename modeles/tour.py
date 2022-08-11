@@ -18,3 +18,6 @@ class Tour:
 
     def __str__(self):
         return f"{self.nom} :\n {self.match1} \n {self.match2} \n {self.match3} \n {self.match4}"
+
+    def __repr__(self):
+        return f"{self.nom} :\n {self.match1} \n {self.match2} \n {self.match3} \n {self.match4} \n"

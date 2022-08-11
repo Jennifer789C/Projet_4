@@ -15,4 +15,4 @@ class Joueur:
         return f"{self.prenom} {self.nom}"
 
     def __repr__(self):
-        return f"{self.prenom} {self.nom} : {self.score}"
+        return f"{self.prenom} {self.nom}"

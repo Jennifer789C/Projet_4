@@ -1,7 +1,5 @@
 """Définition d'un match"""
 
-from modeles.joueur import Joueur
-
 
 class Match:
     """Un match se compose de 2 joueurs et un résultat chacun"""
