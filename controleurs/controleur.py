@@ -1,6 +1,7 @@
 """Définition du contrôleur"""
 
 import datetime
+from tinydb import TinyDB
 from modeles.tournoi import Tournoi
 from modeles.tour import Tour
 from modeles.match import Match
@@ -12,14 +13,18 @@ JOUEURS_MAX = 8
 
 
 class Controleur:
-    """Un contrôleur a un tournoi, un menu et une vue utilisateur"""
+    """Un contrôleur a un tournoi, une vue utilisateur, un menu principal et une base de données"""
     def __init__(self):
-        """Initialise les vues et le modèle"""
+        """Initialise les vues, le modèle et la base de données"""
         # vue
         self.vue = Vue()
         self.menu = Menu()
         # modèle
         self.tournoi = self.creer_tournoi()
+        # base de données : contient une table joueurs et une table tournois
+        bdd = TinyDB("base_de_données.json")
+        self.table_joueurs = bdd.table("joueurs")
+        self.table_tournois = bdd.table("tournois")
 
     def creer_tournoi(self):
         """Crée un tournoi"""
@@ -35,10 +40,16 @@ class Controleur:
 
     def saisir_joueurs(self):
         """Crée la liste de joueurs"""
+        joueurs_serialises = []
         while len(self.tournoi.joueurs) < JOUEURS_MAX:
             donnees = self.vue.saisir_donnees_joueurs()
             joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"], donnees["classement"])
             self.tournoi.joueurs.append(joueur)
+            date_naissance = str(joueur.date_naissance)
+            joueur_serialise = {"nom": joueur.nom, "prenom": joueur.prenom, "date_naissance": date_naissance,
+                                "sexe": joueur.sexe, "classement": joueur.classement}
+            joueurs_serialises.append(joueur_serialise)
+        return joueurs_serialises
 
     def generer_paires_tour1(self):
         """Génère les paires de joueurs du premier tour"""
@@ -123,12 +134,54 @@ class Controleur:
             classement = self.vue.saisir_nouveau_classement(joueur)
             joueur.classement = classement
 
+    def serialiser_tournoi(self, tournoi):
+        """Sérialise le tournoi pour l'ajouter à la base de données"""
+        date_debut = str(tournoi.date_debut)
+        date_fin = str(tournoi.date_fin)
+        joueurs_tournoi = []
+        for participant in tournoi.joueurs:
+            date_naissance = str(participant.date_naissance)
+            personne = {"nom": participant.nom, "prenom": participant.prenom, "date_naissance": date_naissance,
+                        "sexe": participant.sexe,
+                        "classement": participant.classement}
+            joueurs_tournoi.append(personne)
+
+        tournees = []
+        for partie in tournoi.tournees:
+            matchs = [partie.match1, partie.match2, partie.match3, partie.match4]
+            rencontres = []
+
+            for match in matchs:
+                date_naissance1 = str(match.joueur1.date_naissance)
+                joueur1 = {"nom": match.joueur1.nom, "prenom": match.joueur1.prenom, "date_naissance": date_naissance1,
+                           "sexe": match.joueur1.sexe, "classement": match.joueur1.classement}
+                score1 = match.score1
+                resultatJ1 = [joueur1, score1]
+                date_naissance2 = str(match.joueur2.date_naissance)
+                joueur2 = {"nom": match.joueur2.nom, "prenom": match.joueur2.prenom, "date_naissance": date_naissance2,
+                           "sexe": match.joueur2.sexe, "classement": match.joueur2.classement}
+                score2 = partie.match1.score2
+                resultatJ2 = [joueur2, score2]
+                rencontre = (resultatJ1, resultatJ2)
+                rencontres.append(rencontre)
+
+            date_heure_debut = str(partie.date_heure_debut)
+            date_heure_fin = str(partie.date_heure_fin)
+            jeu = {"nom": partie.nom, "matchs": rencontres, "date_heure_debut": date_heure_debut, "date_heure_fin": date_heure_fin}
+            tournees.append(jeu)
+
+        tournoi_serialise = {"nom": tournoi.nom, "lieu": tournoi.lieu, "date_debut": date_debut, "date_fin": date_fin,
+                             "temps": tournoi.temps, "description": tournoi.description, "nb_tours": tournoi.nb_tours,
+                             "joueurs": joueurs_tournoi, "tournees": tournees}
+
+        return tournoi_serialise
+
     def afficher_rapports(self):
         """Interagit avec le système en fonction des choix de l'utilisateur"""
         choix = self.menu.choix_rapport()
         if choix == "1":
-            # A gérer avec le package TinyDB
-            pass
+            for row in self.table_joueurs:
+                self.menu.afficher_rapport(row)
 
         if choix == "2":
             if len(self.tournoi.joueurs) == 0:
@@ -143,8 +196,8 @@ class Controleur:
                 self.menu.afficher_rapport(self.tournoi.joueurs)
 
         if choix == "3":
-            self.menu.afficher_rapport(self.tournoi)
-            # A améliorer avec le package TinyDB
+            for row in self.table_tournois:
+                self.menu.afficher_rapport(row)
 
         if choix == "4":
             self.menu.afficher_rapport(self.tournoi.tournees)
@@ -156,7 +209,7 @@ class Controleur:
             self.menu.afficher_menu_principal()
             exit()
 
-    def commencer(self):
+    def menu_principal(self):
         """Commence le tournoi"""
         while True:
             choix = self.menu.afficher_menu_principal()
@@ -171,7 +224,8 @@ class Controleur:
                 if len(self.tournoi.joueurs) == JOUEURS_MAX:
                     self.menu.max_joueurs_atteint()
                 else:
-                    self.saisir_joueurs()
+                    joueurs = self.saisir_joueurs()
+                    self.table_joueurs.insert_multiple(joueurs)
 
             if choix == "2":
                 if len(self.tournoi.tournees) == self.tournoi.nb_tours:
@@ -197,6 +251,8 @@ class Controleur:
 
                     if numero_round == self.tournoi.nb_tours:
                         self.vue.afficher_resultats(self.tournoi)
+                        tournoi_serialise = self.serialiser_tournoi(self.tournoi)
+                        self.table_tournois.insert(tournoi_serialise)
 
             if choix == "3":
                 self.saisir_nouveaux_classements(self.tournoi.joueurs)

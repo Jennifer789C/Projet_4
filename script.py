@@ -3,7 +3,7 @@ from controleurs.controleur import Controleur
 
 def main():
     jeu = Controleur()
-    jeu.commencer()
+    jeu.menu_principal()
 
 
 main()
@@ -13,5 +13,5 @@ gestion des erreurs : un classement déjà attribué à un joueur
 gestion des erreurs : si rien n'est renseigné pour le nom ou le prénom du joueur
 gestion des erreurs : si rien n'est renseigné pour le nom et le lieu du tournoi
 
-Intégrer le package TinyDB
+Intégration de Flake8
 """
