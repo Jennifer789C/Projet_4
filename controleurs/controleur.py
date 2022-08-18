@@ -43,7 +43,8 @@ class Controleur:
         joueurs_serialises = []
         while len(self.tournoi.joueurs) < JOUEURS_MAX:
             donnees = self.vue.saisir_donnees_joueurs()
-            joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"], donnees["classement"])
+            joueur = Joueur(donnees["nom"], donnees["prenom"], donnees["date_naissance"], donnees["sexe"],
+                            donnees["classement"])
             self.tournoi.joueurs.append(joueur)
             date_naissance = str(joueur.date_naissance)
             joueur_serialise = {"nom": joueur.nom, "prenom": joueur.prenom, "date_naissance": date_naissance,
@@ -167,7 +168,8 @@ class Controleur:
 
             date_heure_debut = str(partie.date_heure_debut)
             date_heure_fin = str(partie.date_heure_fin)
-            jeu = {"nom": partie.nom, "matchs": rencontres, "date_heure_debut": date_heure_debut, "date_heure_fin": date_heure_fin}
+            jeu = {"nom": partie.nom, "matchs": rencontres, "date_heure_debut": date_heure_debut,
+                   "date_heure_fin": date_heure_fin}
             tournees.append(jeu)
 
         tournoi_serialise = {"nom": tournoi.nom, "lieu": tournoi.lieu, "date_debut": date_debut, "date_fin": date_fin,

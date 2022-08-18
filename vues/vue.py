@@ -9,8 +9,13 @@ class Vue:
         """L'utilisateur saisi les infos du tournoi"""
         infos = {}
         nom = input("Quel est le nom de ce tournoi ? ")
+        while nom == "":
+            nom = input("Veuillez saisir un nom pour ce tournoi : ")
         infos["nom"] = nom
+
         lieu = input("Où se déroule ce tournoi ? ")
+        while lieu == "":
+            lieu = input("Veuillez saisir un nom pour ce tournoi : ")
         infos["lieu"] = lieu
 
         date_debut = input("Quand se déroule ce tournoi ? (veuillez saisir une date au format AAAA-MM-JJ) ")
@@ -19,12 +24,11 @@ class Vue:
                 date_debut = date.fromisoformat(date_debut)
                 break
             except ValueError:
-                print("Veuillez saisir une date au format AAAA-MM-JJ")
-                date_debut = input("Quand se déroule ce tournoi ? ")
+                date_debut = input("Veuillez saisir une date au format AAAA-MM-JJ : ")
         infos["date_debut"] = date_debut
 
-        date_fin = input("Ce tournoi se déroule-t-il sur plusieurs dates ? Si oui, quelle est la date de fin ? (veuillez saisir une "
-                         "date au format AAAA-MM-JJ) ")
+        date_fin = input("Ce tournoi se déroule-t-il sur plusieurs dates ? Si oui, quelle est la date de fin ? "
+                         "(veuillez saisir une date au format AAAA-MM-JJ) ")
         if date_fin == "":
             infos["date_fin"] = date_debut
         else:
@@ -33,14 +37,18 @@ class Vue:
                     date_fin = date.fromisoformat(date_fin)
                     break
                 except ValueError:
-                    print("Veuillez saisir une date au format AAAA-MM-JJ")
-                    date_fin = input("Quelle est la date de fin de ce tournoi ? ")
+                    date_fin = input("Veuillez saisir une date au format AAAA-MM-JJ : ")
             infos["date_fin"] = date_fin
 
-        temps = input("S'agit-il d'un 1=bullet 2=blitz 3=coup rapide ? ")
-        while temps != "1" and temps != "2" and temps != "3":
-            print("Veuillez saisir 1 pour un bullet, 2 pour un blitz ou 3 pour un coup rapide")
-            temps = input("S'agit-il d'un 1=bullet 2=blitz 3=coup rapide ? ")
+        choix = input("S'agit-il d'un 1=bullet 2=blitz 3=coup rapide ? ")
+        while choix != "1" and choix != "2" and choix != "3":
+            choix = input("Veuillez saisir 1 pour un bullet, 2 pour un blitz ou 3 pour un coup rapide : ")
+        if choix == "1":
+            temps = "bullet"
+        elif choix == "2":
+            temps = "blitz"
+        else:
+            temps = "coup rapide"
         infos["temps"] = temps
 
         nb_tours = input("En combien de tours va se passer ce tournoi ? (par défaut, il y en a 4) ")
@@ -60,8 +68,13 @@ class Vue:
         donnees = {}
         print()
         nom = input("Quel est votre nom de famille ? ")
+        while nom == "":
+            nom = input("Veuillez saisir un nom : ")
         donnees["nom"] = nom
+
         prenom = input("Quel est votre prénom ? ")
+        while prenom == "":
+            prenom = input("Veuillez saisir un prenom : ")
         donnees["prenom"] = prenom
 
         date_naissance = input("Quelle est votre date de naissance ? (veuillez saisir une date au format AAAA-MM-JJ) ")
@@ -110,7 +123,8 @@ class Vue:
         """Demande à l'utilisateur de saisir les résultats de chaque match du tour"""
         print()
         print(f"Pour le match : {match}")
-        resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, 2={match.joueur2} gagne : ")
+        resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, "
+                         f"2={match.joueur2} gagne : ")
         while resultat != "0" and resultat != "1" and resultat != "2":
             print("Veuillez saisir 0 pour une égalité et, 1 ou 2 pour désigner le joueur gagnant")
             resultat = input(f"Veuillez indiquer le résultat : 0=égalité, 1={match.joueur1} gagne, "
